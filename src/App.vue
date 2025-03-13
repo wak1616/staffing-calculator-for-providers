@@ -263,7 +263,7 @@ const getEmoji = (index) => {
                 @click="toggleAssumptions"
                 class="toggle-btn"
               >
-                <span class="toggle-text mr-2">{{ showAssumptions ? 'Hide assumptions' : 'View or edit assumptions' }}</span>
+                <span class="toggle-text mr-2">{{ showAssumptions ? '⬆️ Hide assumptions' : '⬇️ View or edit assumptions' }}</span>
                 <v-icon>{{ showAssumptions ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
               </v-btn>
             </div>
