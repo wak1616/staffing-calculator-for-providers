@@ -151,7 +151,7 @@ const getEmoji = (index) => {
     </v-app-bar>
 
     <v-main>
-      <v-container class="container-fluid mx-auto" style="max-width: 1200px;">
+      <v-container class="container-fluid">
         <!-- Introduction Section -->
         <v-card class="mb-6" variant="outlined">
           <v-card-text class="py-4">
