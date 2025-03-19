@@ -11,6 +11,7 @@ const showAssumptions = ref(false);
 // Revenue per FTE values (preset but editable)
 const mdRevenuePerFTE = ref(550000); // Updated to $550,000 per FTE for MD
 const odRevenuePerFTE = ref(275000); // Updated to $275,000 per FTE for OD
+const retinaMdRevenuePerFTE = ref(400000); // $400,000 per FTE for Retina MD
 
 // Format a number as currency
 const formatAsCurrency = (value) => {
@@ -80,9 +81,13 @@ const technicians = computed(() => {
   const revValue = parseFloat(revenue.value);
   if (isNaN(revValue)) return 0;
   
-  return providerType.value === 'MD' 
-    ? revValue / mdRevenuePerFTE.value 
-    : revValue / odRevenuePerFTE.value;
+  if (providerType.value === 'MD') {
+    return revValue / mdRevenuePerFTE.value;
+  } else if (providerType.value === 'OD') {
+    return revValue / odRevenuePerFTE.value;
+  } else {
+    return revValue / retinaMdRevenuePerFTE.value;
+  }
 });
 
 // Check if technicians exceed the maximum cap
@@ -187,6 +192,9 @@ const getEmoji = (index) => {
                   <v-btn value="OD" class="flex-grow-1">
                     Optometric Doctor (OD)
                   </v-btn>
+                  <v-btn value="RETINA_MD" class="flex-grow-1">
+                    Retina Medical Doctor
+                  </v-btn>
                 </v-btn-toggle>
               </div>
 
@@ -250,6 +258,21 @@ const getEmoji = (index) => {
                         </td>
                         <td>Target revenue per technician for Optometric Doctors</td>
                       </tr>
+                      <tr>
+                        <td>Retina Medical Doctor</td>
+                        <td>
+                          <v-text-field
+                            v-model="retinaMdRevenuePerFTE"
+                            density="compact"
+                            hide-details
+                            prefix="$"
+                            type="number"
+                            variant="outlined"
+                            class="responsive-field input-large assumption-input"
+                          ></v-text-field>
+                        </td>
+                        <td>Target revenue per technician for Retina Medical Doctors</td>
+                      </tr>
                     </tbody>
                   </v-table>
                 </div>
@@ -283,10 +306,20 @@ const getEmoji = (index) => {
                   Doctors are currently capped at 8 technicians maximum
                 </div>
                 <div class="text-body-1 mt-2">
-                  Based on {{ formatCurrency(revenue) }} yearly revenue for {{ providerType === 'MD' ? 'a Medical' : 'an Optometric' }} Doctor
+                  Based on {{ formatCurrency(revenue) }} yearly revenue for 
+                  {{ providerType === 'MD' 
+                    ? 'a Medical' 
+                    : providerType === 'OD' 
+                      ? 'an Optometric' 
+                      : 'a Retina Medical' }} Doctor
                 </div>
                 <div class="text-body-2 mt-1">
-                  Using {{ formatCurrency(providerType === 'MD' ? mdRevenuePerFTE : odRevenuePerFTE) }} revenue per FTE
+                  Using {{ formatCurrency(
+                    providerType === 'MD' 
+                      ? mdRevenuePerFTE 
+                      : providerType === 'OD' 
+                        ? odRevenuePerFTE 
+                        : retinaMdRevenuePerFTE) }} revenue per FTE
                 </div>
               </div>
               
