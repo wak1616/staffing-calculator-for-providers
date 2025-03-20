@@ -11,7 +11,7 @@ const showAssumptions = ref(false);
 // Revenue per FTE values (preset but editable)
 const mdRevenuePerFTE = ref(550000); // Updated to $550,000 per FTE for MD
 const odRevenuePerFTE = ref(275000); // Updated to $275,000 per FTE for OD
-const retinaMdRevenuePerFTE = ref(400000); // $400,000 per FTE for Retina MD
+const retinaMdRevenuePerFTE = ref(325000); // $325,000 per FTE for Retina MD
 
 // Format a number as currency
 const formatAsCurrency = (value) => {
@@ -193,7 +193,7 @@ const getEmoji = (index) => {
                     Optometric Doctor (OD)
                   </v-btn>
                   <v-btn value="RETINA_MD" class="flex-grow-1">
-                    Retina Medical Doctor
+                    Retina Medical Doctor (MD)
                   </v-btn>
                 </v-btn-toggle>
               </div>
@@ -241,7 +241,7 @@ const getEmoji = (index) => {
                             class="responsive-field input-large assumption-input"
                           ></v-text-field>
                         </td>
-                        <td>Target revenue per technician for Medical Doctors</td>
+                        <td>Target revenue per technician for Ophthalmologists</td>
                       </tr>
                       <tr>
                         <td>Optometric Doctor (OD)</td>
@@ -256,10 +256,10 @@ const getEmoji = (index) => {
                             class="responsive-field input-large assumption-input"
                           ></v-text-field>
                         </td>
-                        <td>Target revenue per technician for Optometric Doctors</td>
+                        <td>Target revenue per technician for Optometrists</td>
                       </tr>
                       <tr>
-                        <td>Retina Medical Doctor</td>
+                        <td>Retina Medical Doctor (MD)</td>
                         <td>
                           <v-text-field
                             v-model="retinaMdRevenuePerFTE"
@@ -271,7 +271,7 @@ const getEmoji = (index) => {
                             class="responsive-field input-large assumption-input"
                           ></v-text-field>
                         </td>
-                        <td>Target revenue per technician for Retina Medical Doctors</td>
+                        <td>Target revenue per technician for Retina Specialists</td>
                       </tr>
                     </tbody>
                   </v-table>
