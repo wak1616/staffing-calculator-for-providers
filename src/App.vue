@@ -156,7 +156,6 @@ const getEmoji = (index) => {
         <v-card class="mb-6" variant="outlined">
           <v-card-text class="py-4">
             <p class="intro-text">Use this calculator to determine the recommended number of technicians based on your practice's yearly revenue projections.</p>
-            <p class="mt-2 disclaimer-text">The purpose of this calculator is to provide an estimate and should not be taken as ground truth. Please contact your Director or VP with any questions.</p>
             <p class="mt-2 disclaimer-text"><strong>Disclaimer:</strong> This calculator is intended for full-time employees (defined as working 32 or more hours of direct patient care per week). Employees with reduced clinical hours should be evaluated on a case-by-case basis.</p>
           </v-card-text>
         </v-card>
