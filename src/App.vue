@@ -231,14 +231,13 @@ const getEmoji = (index) => {
                 <div class="text-subtitle-1 mb-2">Provider Type</div>
                 <div class="provider-toggle-container">
                   <v-btn
-                    icon
+                    icon="mdi-chevron-left"
                     variant="text"
                     class="scroll-arrow left"
                     @click="scrollToggleLeft"
                     :disabled="!canScrollLeft"
-                  >
-                    <v-icon>mdi-chevron-left</v-icon>
-                  </v-btn>
+                    size="small"
+                  ></v-btn>
                   <v-btn-toggle
                     v-model="providerType"
                     mandatory
@@ -258,14 +257,13 @@ const getEmoji = (index) => {
                     </v-btn>
                   </v-btn-toggle>
                   <v-btn
-                    icon
+                    icon="mdi-chevron-right"
                     variant="text"
                     class="scroll-arrow right"
                     @click="scrollToggleRight"
                     :disabled="!canScrollRight"
-                  >
-                    <v-icon>mdi-chevron-right</v-icon>
-                  </v-btn>
+                    size="small"
+                  ></v-btn>
                 </div>
               </div>
 
@@ -501,11 +499,13 @@ const getEmoji = (index) => {
 .responsive-toggle {
   max-width: 100%;
   overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 0 36px;
 }
 
-.responsive-table-container {
-  width: 100%;
-  overflow-x: auto;
+.responsive-toggle::-webkit-scrollbar {
+  display: none;
 }
 
 .provider-toggle-container {
@@ -517,9 +517,12 @@ const getEmoji = (index) => {
 
 .scroll-arrow {
   position: absolute;
-  z-index: 1;
-  background-color: rgba(255, 255, 255, 0.9) !important;
+  z-index: 2;
+  background-color: white !important;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-width: 36px !important;
+  height: 36px !important;
+  padding: 0 !important;
 }
 
 .scroll-arrow.left {
@@ -528,17 +531,6 @@ const getEmoji = (index) => {
 
 .scroll-arrow.right {
   right: 0;
-}
-
-.responsive-toggle {
-  max-width: 100%;
-  overflow-x: auto;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
-}
-
-.responsive-toggle::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
 }
 
 @media (max-width: 600px) {
