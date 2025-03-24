@@ -229,61 +229,45 @@ const getEmoji = (index) => {
 
               <div class="mt-4 mb-2">
                 <div class="text-subtitle-1 mb-2">Provider Type</div>
-                
-                <!-- Navigation arrows and toggle container -->
-                <div class="scroll-indicator left" v-if="canScrollLeft">
-                  <v-icon color="primary" size="32">mdi-chevron-double-left</v-icon>
-                </div>
-                
                 <div class="provider-toggle-container">
                   <v-btn
-                    fab
-                    color="error"
-                    size="large"
+                    icon
+                    variant="text"
                     class="scroll-arrow left"
                     @click="scrollToggleLeft"
                     :disabled="!canScrollLeft"
-                    elevation="4"
+                    :class="{'invisible': !canScrollLeft}"
                   >
-                    <v-icon size="36">mdi-chevron-left</v-icon>
+                    <v-icon>mdi-chevron-left</v-icon>
                   </v-btn>
-                  
-                  <div class="toggle-wrapper mx-3">
-                    <v-btn-toggle
-                      v-model="providerType"
-                      mandatory
-                      color="primary"
-                      divided
-                      class="w-100 responsive-toggle"
-                      ref="toggleRef"
-                    >
-                      <v-btn value="Cataract MD" class="flex-grow-1">
-                        Cataract Surgeon
-                      </v-btn>
-                      <v-btn value="Retina MD" class="flex-grow-1">
-                        Retina or Other MD
-                      </v-btn>
-                      <v-btn value="OD" class="flex-grow-1">
-                        Optometrist
-                      </v-btn>
-                    </v-btn-toggle>
-                  </div>
-                  
+                  <v-btn-toggle
+                    v-model="providerType"
+                    mandatory
+                    color="primary"
+                    divided
+                    class="w-100 responsive-toggle"
+                    ref="toggleRef"
+                  >
+                    <v-btn value="Cataract MD" class="flex-grow-1">
+                      Cataract Surgeon
+                    </v-btn>
+                    <v-btn value="Retina MD" class="flex-grow-1">
+                      Retina or Other MD
+                    </v-btn>
+                    <v-btn value="OD" class="flex-grow-1">
+                      Optometrist
+                    </v-btn>
+                  </v-btn-toggle>
                   <v-btn
-                    fab
-                    color="error"
-                    size="large"
+                    icon
+                    variant="text"
                     class="scroll-arrow right"
                     @click="scrollToggleRight"
                     :disabled="!canScrollRight"
-                    elevation="4"
+                    :class="{'invisible': !canScrollRight}"
                   >
-                    <v-icon size="36">mdi-chevron-right</v-icon>
+                    <v-icon>mdi-chevron-right</v-icon>
                   </v-btn>
-                </div>
-                
-                <div class="scroll-indicator right" v-if="canScrollRight">
-                  <v-icon color="primary" size="32">mdi-chevron-double-right</v-icon>
                 </div>
               </div>
 
@@ -516,6 +500,11 @@ const getEmoji = (index) => {
   overflow: hidden;
 }
 
+.responsive-toggle {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
 .responsive-table-container {
   width: 100%;
   overflow-x: auto;
@@ -526,13 +515,27 @@ const getEmoji = (index) => {
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 0 64px; /* Increase padding to make space for the arrows */
-  margin: 16px 0;
 }
 
-.toggle-wrapper {
-  flex: 1;
-  overflow: hidden;
+.scroll-arrow {
+  position: absolute;
+  z-index: 1;
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.provider-toggle-container:hover .scroll-arrow {
+  opacity: 1;
+}
+
+.scroll-arrow.left {
+  left: 0;
+}
+
+.scroll-arrow.right {
+  right: 0;
 }
 
 .responsive-toggle {
@@ -540,55 +543,10 @@ const getEmoji = (index) => {
   overflow-x: auto;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
-  margin: 0 8px; /* Add margin to create space between toggle and arrows */
 }
 
 .responsive-toggle::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
-}
-
-.scroll-arrow {
-  position: absolute;
-  z-index: 2;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25) !important;
-  transform: scale(1.2);
-  border: 3px solid white !important;
-}
-
-.scroll-arrow.left {
-  left: 8px;
-}
-
-.scroll-arrow.right {
-  right: 8px;
-}
-
-.scroll-arrow:disabled {
-  opacity: 0.5;
-  background-color: #e0e0e0 !important;
-}
-
-.scroll-indicator {
-  display: none;
-  text-align: center;
-  margin: 4px 0;
-  animation: pulse 1.5s infinite;
-}
-
-.scroll-indicator.left {
-  text-align: left;
-  margin-left: 8px;
-}
-
-.scroll-indicator.right {
-  text-align: right;
-  margin-right: 8px;
-}
-
-@keyframes pulse {
-  0% { opacity: 0.5; }
-  50% { opacity: 1; }
-  100% { opacity: 0.5; }
 }
 
 @media (max-width: 600px) {
@@ -610,28 +568,16 @@ const getEmoji = (index) => {
   .input-large input {
     font-size: 1rem !important;
   }
-  
-  .provider-toggle-container {
-    padding: 0 56px; /* Slightly less padding on mobile */
-  }
-  
-  .scroll-arrow {
-    display: flex !important;
-  }
-  
-  .scroll-arrow .v-icon {
-    color: white !important;
-    font-weight: bold;
-  }
-  
-  .scroll-indicator {
-    display: block;
-  }
 }
 
 @media (min-width: 601px) {
   .scroll-arrow {
     display: none !important;
   }
+}
+
+.invisible {
+  opacity: 0 !important;
+  pointer-events: none;
 }
 </style>
