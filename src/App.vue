@@ -122,7 +122,31 @@ const checkScroll = () => {
   
   canScrollLeft.value = container.scrollLeft > 0;
   canScrollRight.value = container.scrollLeft < (container.scrollWidth - container.clientWidth);
+  
+  // Update active dot based on scroll position
+  updateActiveDot(container);
 };
+
+// Update active dot based on scroll position
+const updateActiveDot = (container) => {
+  if (!container) return;
+  
+  const totalWidth = container.scrollWidth - container.clientWidth;
+  const scrollPosition = container.scrollLeft;
+  
+  // Calculate which third of the scroll area we're in
+  const scrollRatio = scrollPosition / totalWidth;
+  
+  if (scrollRatio < 0.33) {
+    activeDotIndex.value = 0;
+  } else if (scrollRatio < 0.66) {
+    activeDotIndex.value = 1;
+  } else {
+    activeDotIndex.value = 2;
+  }
+};
+
+const activeDotIndex = ref(0);
 
 // Computed properties
 const technicians = computed(() => {
@@ -268,6 +292,18 @@ const getEmoji = (index) => {
                   >
                     <v-icon>mdi-chevron-right</v-icon>
                   </v-btn>
+                </div>
+                
+                <!-- Mobile scroll indicator -->
+                <div class="mobile-scroll-indicator">
+                  <div class="scroll-dots">
+                    <div 
+                      v-for="i in 3" 
+                      :key="i-1" 
+                      class="scroll-dot"
+                      :class="{'active': activeDotIndex === i-1}"
+                    ></div>
+                  </div>
                 </div>
               </div>
 
@@ -549,6 +585,31 @@ const getEmoji = (index) => {
   display: none; /* Chrome, Safari, Opera */
 }
 
+/* Mobile scroll indicator */
+.mobile-scroll-indicator {
+  display: none;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.scroll-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.scroll-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.scroll-dot.active {
+  background-color: rgb(25, 118, 210);
+  transform: scale(1.2);
+}
+
 @media (max-width: 600px) {
   .app-title {
     font-size: 1.5rem;
@@ -578,6 +639,11 @@ const getEmoji = (index) => {
   .responsive-toggle {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  }
+  
+  /* Show scroll indicator on mobile */
+  .mobile-scroll-indicator {
+    display: flex;
   }
 }
 
