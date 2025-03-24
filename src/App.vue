@@ -216,237 +216,234 @@ const getEmoji = (index) => {
 <template>
   <v-app>
     <v-app-bar color="primary" height="72">
-      <v-container class="d-flex align-center px-0">
+      <v-container class="d-flex align-center">
         <v-app-bar-title class="app-title">Provider Staffing Calculator</v-app-bar-title>
       </v-container>
     </v-app-bar>
 
     <v-main>
-      <v-container class="container-fluid pa-0">
-        <!-- Content cards with padding -->
-        <div class="content-wrapper px-4">
-          <!-- Introduction Section -->
-          <v-card class="mb-6" variant="outlined">
-            <v-card-text class="py-4">
-              <p class="intro-text">Use this calculator to estimate number of technicians based on your practice's yearly revenue projections.</p>
-              <p class="mt-2 disclaimer-text"><strong>Disclaimer:</strong> This calculator is intended for a full-time physician defined as working 32 or more hours of direct patient care per week. Physicians with reduced clinical hours should be evaluated on a case-by-case basis.</p>
-            </v-card-text>
-          </v-card>
+      <v-container class="container-fluid">
+        <!-- Introduction Section -->
+        <v-card class="mb-6" variant="outlined">
+          <v-card-text class="py-4">
+            <p class="intro-text">Use this calculator to estimate number of technicians based on your practice's yearly revenue projections.</p>
+            <p class="mt-2 disclaimer-text"><strong>Disclaimer:</strong> This calculator is intended for a full-time physician defined as working 32 or more hours of direct patient care per week. Physicians with reduced clinical hours should be evaluated on a case-by-case basis.</p>
+          </v-card-text>
+        </v-card>
 
-          <!-- Input Form Section -->
-          <v-card class="mb-6">
-            <v-card-title class="text-h6">Input Your Information</v-card-title>
-            <v-card-text>
-              <v-form @submit.prevent="calculateStaffing">
-                <v-text-field
-                  v-model="formattedRevenue"
-                  @input="updateRevenue"
-                  label="Expected Yearly Revenue"
-                  prefix="$"
-                  type="text"
-                  hint="Enter your projected revenue for the year"
-                  clearable
-                  required
-                  class="responsive-field input-large"
-                ></v-text-field>
+        <!-- Input Form Section -->
+        <v-card class="mb-6">
+          <v-card-title class="text-h6">Input Your Information</v-card-title>
+          <v-card-text>
+            <v-form @submit.prevent="calculateStaffing">
+              <v-text-field
+                v-model="formattedRevenue"
+                @input="updateRevenue"
+                label="Expected Yearly Revenue"
+                prefix="$"
+                type="text"
+                hint="Enter your projected revenue for the year"
+                clearable
+                required
+                class="responsive-field input-large"
+              ></v-text-field>
 
-                <div class="mt-4 mb-2">
-                  <div class="text-subtitle-1 mb-2">Provider Type</div>
-                  <div class="provider-toggle-container">
-                    <v-btn
-                      icon
-                      variant="text"
-                      class="scroll-arrow left"
-                      @click="scrollToggleLeft"
-                      :disabled="!canScrollLeft"
-                      :class="{'invisible': !canScrollLeft}"
-                    >
-                      <v-icon>mdi-chevron-left</v-icon>
+              <div class="mt-4 mb-2">
+                <div class="text-subtitle-1 mb-2">Provider Type</div>
+                <div class="provider-toggle-container">
+                  <v-btn
+                    icon
+                    variant="text"
+                    class="scroll-arrow left"
+                    @click="scrollToggleLeft"
+                    :disabled="!canScrollLeft"
+                    :class="{'invisible': !canScrollLeft}"
+                  >
+                    <v-icon>mdi-chevron-left</v-icon>
+                  </v-btn>
+                  <v-btn-toggle
+                    v-model="providerType"
+                    mandatory
+                    color="primary"
+                    divided
+                    class="w-100 responsive-toggle"
+                    ref="toggleRef"
+                  >
+                    <v-btn value="Cataract MD" class="flex-grow-1">
+                      Cataract Surgeon
                     </v-btn>
-                    <v-btn-toggle
-                      v-model="providerType"
-                      mandatory
-                      color="primary"
-                      divided
-                      class="w-100 responsive-toggle"
-                      ref="toggleRef"
-                    >
-                      <v-btn value="Cataract MD" class="flex-grow-1">
-                        Cataract Surgeon
-                      </v-btn>
-                      <v-btn value="Retina MD" class="flex-grow-1">
-                        Retina or Other MD
-                      </v-btn>
-                      <v-btn value="OD" class="flex-grow-1">
-                        Optometrist
-                      </v-btn>
-                    </v-btn-toggle>
-                    <v-btn
-                      icon
-                      variant="text"
-                      class="scroll-arrow right"
-                      @click="scrollToggleRight"
-                      :disabled="!canScrollRight"
-                      :class="{'invisible': !canScrollRight}"
-                    >
-                      <v-icon>mdi-chevron-right</v-icon>
+                    <v-btn value="Retina MD" class="flex-grow-1">
+                      Retina or Other MD
                     </v-btn>
-                  </div>
-                  
-                  <!-- Mobile scroll indicator -->
-                  <div class="mobile-scroll-indicator">
-                    <div class="scroll-track">
-                      <div 
-                        class="scroll-thumb"
-                        :style="{ 
-                          width: scrollThumbWidth + '%', 
-                          left: scrollThumbPosition + '%' 
-                        }"
-                      ></div>
-                    </div>
+                    <v-btn value="OD" class="flex-grow-1">
+                      Optometrist
+                    </v-btn>
+                  </v-btn-toggle>
+                  <v-btn
+                    icon
+                    variant="text"
+                    class="scroll-arrow right"
+                    @click="scrollToggleRight"
+                    :disabled="!canScrollRight"
+                    :class="{'invisible': !canScrollRight}"
+                  >
+                    <v-icon>mdi-chevron-right</v-icon>
+                  </v-btn>
+                </div>
+                
+                <!-- Mobile scroll indicator -->
+                <div class="mobile-scroll-indicator">
+                  <div class="scroll-track">
+                    <div 
+                      class="scroll-thumb"
+                      :style="{ 
+                        width: scrollThumbWidth + '%', 
+                        left: scrollThumbPosition + '%' 
+                      }"
+                    ></div>
                   </div>
                 </div>
+              </div>
 
-                <v-btn
-                  color="primary"
-                  block
-                  @click="calculateStaffing"
-                  :disabled="!revenue"
-                  class="mt-4"
-                  type="button"
-                >
-                  Calculate
-                </v-btn>
-              </v-form>
-            </v-card-text>
-          </v-card>
+              <v-btn
+                color="primary"
+                block
+                @click="calculateStaffing"
+                :disabled="!revenue"
+                class="mt-4"
+                type="button"
+              >
+                Calculate
+              </v-btn>
+            </v-form>
+          </v-card-text>
+        </v-card>
 
-          <!-- Revenue per FTE Assumptions (Collapsible) -->
-          <v-card class="mb-6">
-            <v-card-title class="text-h6">Revenue Per FTE Assumptions</v-card-title>
-            <v-card-text>
-              <v-expand-transition>
-                <div v-if="showAssumptions">
-                  <div class="responsive-table-container">
-                    <v-table>
-                      <thead>
-                        <tr>
-                          <th>Provider Type</th>
-                          <th>Revenue per FTE</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>Cataract surgeon (MD)</td>
-                          <td>
-                            <v-text-field
-                              v-model="formattedMdRevenuePerFTE"
-                              @input="(e) => updateRevenuePerFTE(e, mdRevenuePerFTE, formattedMdRevenuePerFTE)"
-                              density="compact"
-                              hide-details
-                              prefix="$"
-                              type="text"
-                              variant="outlined"
-                              class="responsive-field input-large assumption-input"
-                            ></v-text-field>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>Retina or other ophthalmologist (MD)</td>
-                          <td>
-                            <v-text-field
-                              v-model="formattedRetinaMdRevenuePerFTE"
-                              @input="(e) => updateRevenuePerFTE(e, retinaMdRevenuePerFTE, formattedRetinaMdRevenuePerFTE)"
-                              density="compact"
-                              hide-details
-                              prefix="$"
-                              type="text"
-                              variant="outlined"
-                              class="responsive-field input-large assumption-input"
-                            ></v-text-field>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>Doctor of optometry (OD)</td>
-                          <td>
-                            <v-text-field
-                              v-model="formattedOdRevenuePerFTE"
-                              @input="(e) => updateRevenuePerFTE(e, odRevenuePerFTE, formattedOdRevenuePerFTE)"
-                              density="compact"
-                              hide-details
-                              prefix="$"
-                              type="text"
-                              variant="outlined"
-                              class="responsive-field input-large assumption-input"
-                            ></v-text-field>
-                          </td>
-                        </tr>
-                       
-                      </tbody>
-                    </v-table>
-                  </div>
+        <!-- Revenue per FTE Assumptions (Collapsible) -->
+        <v-card class="mb-6">
+          <v-card-title class="text-h6">Revenue Per FTE Assumptions</v-card-title>
+          <v-card-text>
+            <v-expand-transition>
+              <div v-if="showAssumptions">
+                <div class="responsive-table-container">
+                  <v-table>
+                    <thead>
+                      <tr>
+                        <th>Provider Type</th>
+                        <th>Revenue per FTE</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Cataract surgeon (MD)</td>
+                        <td>
+                          <v-text-field
+                            v-model="formattedMdRevenuePerFTE"
+                            @input="(e) => updateRevenuePerFTE(e, mdRevenuePerFTE, formattedMdRevenuePerFTE)"
+                            density="compact"
+                            hide-details
+                            prefix="$"
+                            type="text"
+                            variant="outlined"
+                            class="responsive-field input-large assumption-input"
+                          ></v-text-field>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Retina or other ophthalmologist (MD)</td>
+                        <td>
+                          <v-text-field
+                            v-model="formattedRetinaMdRevenuePerFTE"
+                            @input="(e) => updateRevenuePerFTE(e, retinaMdRevenuePerFTE, formattedRetinaMdRevenuePerFTE)"
+                            density="compact"
+                            hide-details
+                            prefix="$"
+                            type="text"
+                            variant="outlined"
+                            class="responsive-field input-large assumption-input"
+                          ></v-text-field>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Doctor of optometry (OD)</td>
+                        <td>
+                          <v-text-field
+                            v-model="formattedOdRevenuePerFTE"
+                            @input="(e) => updateRevenuePerFTE(e, odRevenuePerFTE, formattedOdRevenuePerFTE)"
+                            density="compact"
+                            hide-details
+                            prefix="$"
+                            type="text"
+                            variant="outlined"
+                            class="responsive-field input-large assumption-input"
+                          ></v-text-field>
+                        </td>
+                      </tr>
+                     
+                    </tbody>
+                  </v-table>
                 </div>
-              </v-expand-transition>
+              </div>
+            </v-expand-transition>
+            
+            <div class="d-flex justify-center mt-4">
+              <v-btn
+                variant="text"
+                color="primary"
+                @click="toggleAssumptions"
+                class="toggle-btn"
+              >
+                <span class="toggle-text mr-2">{{ showAssumptions ? '⬆️ Hide assumptions' : '⬇️ View or edit assumptions' }}</span>
+                <v-icon>{{ showAssumptions ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+              </v-btn>
+            </div>
+          </v-card-text>
+        </v-card>
+
+        <!-- Results Section -->
+        <div v-if="showResults" class="mb-6">
+          <v-card color="secondary" variant="outlined">
+            <v-card-title class="text-h5">Staffing Results</v-card-title>
+            <v-card-text>
+              <!-- Results Text -->
+              <div class="text-center mb-4">
+                <h3 class="text-h6">Calculated Technicians Needed</h3>
+                <div class="text-h3 mt-2">{{ displayTechnicians }}</div>
+                <div v-if="exceedsMaxTechnicians" class="text-red mt-2 font-weight-medium">
+                  Physicians are currently capped at 8 technicians maximum
+                </div>
+                <div class="text-body-1 mt-2">
+                  Based on {{ formatCurrency(revenue) }} expected yearly revenue for 
+                  {{ providerType === 'Cataract MD' 
+                    ? 'a cataract MD' 
+                    : providerType === 'Retina MD' 
+                      ? 'a retina specialist or other ophthalmologist' 
+                      : 'an optometric doctor' }} 
+                </div>
+                <div class="text-body-2 mt-1">
+                  Using {{ formatCurrency(
+                    providerType === 'Cataract MD' 
+                      ? mdRevenuePerFTE 
+                      : providerType === 'Retina MD' 
+                        ? retinaMdRevenuePerFTE 
+                        : odRevenuePerFTE) }} revenue per FTE
+                </div>
+              </div>
               
-              <div class="d-flex justify-center mt-4">
-                <v-btn
-                  variant="text"
-                  color="primary"
-                  @click="toggleAssumptions"
-                  class="toggle-btn"
-                >
-                  <span class="toggle-text mr-2">{{ showAssumptions ? '⬆️ Hide assumptions' : '⬇️ View or edit assumptions' }}</span>
-                  <v-icon>{{ showAssumptions ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
-                </v-btn>
+              <!-- Visual Representation -->
+              <div class="text-center my-4">
+                <div class="d-flex justify-center flex-wrap">
+                  <div v-for="i in wholeNumber" :key="i" class="ma-1 person-emoji">
+                    {{ getEmoji(i-1) }}
+                  </div>
+                  <!-- Half technician if needed -->
+                  <div v-if="fraction > 0" class="ma-1 person-emoji half-opacity">
+                    {{ getEmoji(wholeNumber) }}
+                  </div>
+                </div>
               </div>
             </v-card-text>
           </v-card>
-
-          <!-- Results Section -->
-          <div v-if="showResults" class="mb-6">
-            <v-card color="secondary" variant="outlined">
-              <v-card-title class="text-h5">Staffing Results</v-card-title>
-              <v-card-text>
-                <!-- Results Text -->
-                <div class="text-center mb-4">
-                  <h3 class="text-h6">Calculated Technicians Needed</h3>
-                  <div class="text-h3 mt-2">{{ displayTechnicians }}</div>
-                  <div v-if="exceedsMaxTechnicians" class="text-red mt-2 font-weight-medium">
-                    Physicians are currently capped at 8 technicians maximum
-                  </div>
-                  <div class="text-body-1 mt-2">
-                    Based on {{ formatCurrency(revenue) }} expected yearly revenue for 
-                    {{ providerType === 'Cataract MD' 
-                      ? 'a cataract MD' 
-                      : providerType === 'Retina MD' 
-                        ? 'a retina specialist or other ophthalmologist' 
-                        : 'an optometric doctor' }} 
-                  </div>
-                  <div class="text-body-2 mt-1">
-                    Using {{ formatCurrency(
-                      providerType === 'Cataract MD' 
-                        ? mdRevenuePerFTE 
-                        : providerType === 'Retina MD' 
-                          ? retinaMdRevenuePerFTE 
-                          : odRevenuePerFTE) }} revenue per FTE
-                  </div>
-                </div>
-                
-                <!-- Visual Representation -->
-                <div class="text-center my-4">
-                  <div class="d-flex justify-center flex-wrap">
-                    <div v-for="i in wholeNumber" :key="i" class="ma-1 person-emoji">
-                      {{ getEmoji(i-1) }}
-                    </div>
-                    <!-- Half technician if needed -->
-                    <div v-if="fraction > 0" class="ma-1 person-emoji half-opacity">
-                      {{ getEmoji(wholeNumber) }}
-                    </div>
-                  </div>
-                </div>
-              </v-card-text>
-            </v-card>
-          </div>
         </div>
       </v-container>
     </v-main>
@@ -528,15 +525,7 @@ const getEmoji = (index) => {
 
 /* Responsive styles */
 .container-fluid {
-  max-width: 100% !important;
-  width: 100%;
-  padding: 0 !important;
-  margin: 0 !important;
-}
-
-.content-wrapper {
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 100%;
   padding: 16px;
 }
 
