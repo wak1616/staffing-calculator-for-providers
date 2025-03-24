@@ -40,19 +40,10 @@ const formatAsCurrency = (value) => {
 };
 
 // Handle revenue input changes
-const updateRevenue = (event) => {
+const updateFormattedValue = (event, rawRef, formattedRef) => {
   const rawValue = event.target.value;
   // Store the raw value (for calculations)
-  revenue.value = rawValue.replace(/[^\d.]/g, '');
-  // Update the formatted display value
-  formattedRevenue.value = formatAsCurrency(rawValue);
-};
-
-// Handle revenue per FTE input changes
-const updateRevenuePerFTE = (event, ref, formattedRef) => {
-  const rawValue = event.target.value;
-  // Store the raw value (for calculations)
-  ref.value = rawValue.replace(/[^\d.]/g, '');
+  rawRef.value = rawValue.replace(/[^\d.]/g, '');
   // Update the formatted display value
   formattedRef.value = formatAsCurrency(rawValue);
 };
@@ -217,14 +208,14 @@ const getEmoji = (index) => {
             <v-form @submit.prevent="calculateStaffing">
               <v-text-field
                 v-model="formattedRevenue"
-                @input="updateRevenue"
+                @input="(e) => updateFormattedValue(e, revenue, formattedRevenue)"
                 label="Expected Yearly Revenue"
                 prefix="$"
                 type="text"
-                hint="Enter your projected revenue for the year"
-                clearable
-                required
+                variant="outlined"
                 class="responsive-field input-large"
+                :rules="[v => !!v || 'Revenue is required']"
+                required
               ></v-text-field>
 
               <div class="mt-4 mb-2">
@@ -303,7 +294,7 @@ const getEmoji = (index) => {
                         <td>
                           <v-text-field
                             v-model="formattedMdRevenuePerFTE"
-                            @input="(e) => updateRevenuePerFTE(e, mdRevenuePerFTE, formattedMdRevenuePerFTE)"
+                            @input="(e) => updateFormattedValue(e, mdRevenuePerFTE, formattedMdRevenuePerFTE)"
                             density="compact"
                             hide-details
                             prefix="$"
@@ -318,7 +309,7 @@ const getEmoji = (index) => {
                         <td>
                           <v-text-field
                             v-model="formattedRetinaMdRevenuePerFTE"
-                            @input="(e) => updateRevenuePerFTE(e, retinaMdRevenuePerFTE, formattedRetinaMdRevenuePerFTE)"
+                            @input="(e) => updateFormattedValue(e, retinaMdRevenuePerFTE, formattedRetinaMdRevenuePerFTE)"
                             density="compact"
                             hide-details
                             prefix="$"
@@ -333,7 +324,7 @@ const getEmoji = (index) => {
                         <td>
                           <v-text-field
                             v-model="formattedOdRevenuePerFTE"
-                            @input="(e) => updateRevenuePerFTE(e, odRevenuePerFTE, formattedOdRevenuePerFTE)"
+                            @input="(e) => updateFormattedValue(e, odRevenuePerFTE, formattedOdRevenuePerFTE)"
                             density="compact"
                             hide-details
                             prefix="$"
