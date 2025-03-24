@@ -216,14 +216,15 @@ const getEmoji = (index) => {
 <template>
   <v-app>
     <v-app-bar color="primary" height="72">
-      <v-container>
+      <v-container class="d-flex align-center px-0">
         <v-app-bar-title class="app-title">Provider Staffing Calculator</v-app-bar-title>
       </v-container>
     </v-app-bar>
 
     <v-main>
-      <v-container class="px-0" fluid>
-        <div class="content-wrapper">
+      <v-container class="container-fluid pa-0">
+        <!-- Content cards with padding -->
+        <div class="content-wrapper px-4">
           <!-- Introduction Section -->
           <v-card class="mb-6" variant="outlined">
             <v-card-text class="py-4">
@@ -527,8 +528,10 @@ const getEmoji = (index) => {
 
 /* Responsive styles */
 .container-fluid {
-  max-width: 100%;
-  padding: 16px;
+  max-width: 100% !important;
+  width: 100%;
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
 .content-wrapper {
