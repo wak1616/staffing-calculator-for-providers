@@ -74,9 +74,21 @@ const personEmojis = [
 // Generate a shuffled array of emojis to ensure randomness but consistency
 const shuffledEmojis = ref([]);
 
+const toggleRef = ref(null);
+const canScrollLeft = ref(false);
+const canScrollRight = ref(false);
+
 onMounted(() => {
   // Shuffle the emoji array
   shuffleEmojis();
+  
+  // Add scroll listener
+  const container = toggleRef.value?.$el;
+  if (container) {
+    container.addEventListener('scroll', checkScroll);
+    // Initial check
+    checkScroll();
+  }
 });
 
 // Shuffle the emojis array
@@ -84,6 +96,32 @@ const shuffleEmojis = () => {
   shuffledEmojis.value = [...personEmojis]
     .sort(() => Math.random() - 0.5)
     .slice(0, 20); // Limit to 20 emojis for performance
+};
+
+// Add scroll functions
+const scrollToggleLeft = () => {
+  const container = toggleRef.value.$el;
+  container.scrollBy({
+    left: -200,
+    behavior: 'smooth'
+  });
+};
+
+const scrollToggleRight = () => {
+  const container = toggleRef.value.$el;
+  container.scrollBy({
+    left: 200,
+    behavior: 'smooth'
+  });
+};
+
+// Check scroll position
+const checkScroll = () => {
+  const container = toggleRef.value?.$el;
+  if (!container) return;
+  
+  canScrollLeft.value = container.scrollLeft > 0;
+  canScrollRight.value = container.scrollLeft < (container.scrollWidth - container.clientWidth);
 };
 
 // Computed properties
@@ -191,23 +229,44 @@ const getEmoji = (index) => {
 
               <div class="mt-4 mb-2">
                 <div class="text-subtitle-1 mb-2">Provider Type</div>
-                <v-btn-toggle
-                  v-model="providerType"
-                  mandatory
-                  color="primary"
-                  divided
-                  class="w-100 responsive-toggle"
-                >
-                  <v-btn value="Cataract MD" class="flex-grow-1">
-                    Cataract Surgeon
+                <div class="provider-toggle-container">
+                  <v-btn
+                    icon
+                    variant="text"
+                    class="scroll-arrow left"
+                    @click="scrollToggleLeft"
+                    :disabled="!canScrollLeft"
+                  >
+                    <v-icon>mdi-chevron-left</v-icon>
                   </v-btn>
-                  <v-btn value="Retina MD" class="flex-grow-1">
-                    Retina or Other MD
+                  <v-btn-toggle
+                    v-model="providerType"
+                    mandatory
+                    color="primary"
+                    divided
+                    class="w-100 responsive-toggle"
+                    ref="toggleRef"
+                  >
+                    <v-btn value="Cataract MD" class="flex-grow-1">
+                      Cataract Surgeon
+                    </v-btn>
+                    <v-btn value="Retina MD" class="flex-grow-1">
+                      Retina or Other MD
+                    </v-btn>
+                    <v-btn value="OD" class="flex-grow-1">
+                      Optometrist
+                    </v-btn>
+                  </v-btn-toggle>
+                  <v-btn
+                    icon
+                    variant="text"
+                    class="scroll-arrow right"
+                    @click="scrollToggleRight"
+                    :disabled="!canScrollRight"
+                  >
+                    <v-icon>mdi-chevron-right</v-icon>
                   </v-btn>
-                  <v-btn value="OD" class="flex-grow-1">
-                    Optometrist
-                  </v-btn>
-                </v-btn-toggle>
+                </div>
               </div>
 
               <v-btn
@@ -449,6 +508,39 @@ const getEmoji = (index) => {
   overflow-x: auto;
 }
 
+.provider-toggle-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.scroll-arrow {
+  position: absolute;
+  z-index: 1;
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.scroll-arrow.left {
+  left: 0;
+}
+
+.scroll-arrow.right {
+  right: 0;
+}
+
+.responsive-toggle {
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.responsive-toggle::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
 @media (max-width: 600px) {
   .app-title {
     font-size: 1.5rem;
@@ -467,6 +559,16 @@ const getEmoji = (index) => {
   
   .input-large input {
     font-size: 1rem !important;
+  }
+  
+  .scroll-arrow {
+    display: flex !important;
+  }
+}
+
+@media (min-width: 601px) {
+  .scroll-arrow {
+    display: none !important;
   }
 }
 </style>
