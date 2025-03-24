@@ -40,10 +40,19 @@ const formatAsCurrency = (value) => {
 };
 
 // Handle revenue input changes
-const updateFormattedValue = (event, rawRef, formattedRef) => {
+const updateRevenue = (event) => {
   const rawValue = event.target.value;
   // Store the raw value (for calculations)
-  rawRef.value = rawValue.replace(/[^\d.]/g, '');
+  revenue.value = rawValue.replace(/[^\d.]/g, '');
+  // Update the formatted display value
+  formattedRevenue.value = formatAsCurrency(rawValue);
+};
+
+// Handle revenue per FTE input changes
+const updateRevenuePerFTE = (event, ref, formattedRef) => {
+  const rawValue = event.target.value;
+  // Store the raw value (for calculations)
+  ref.value = rawValue.replace(/[^\d.]/g, '');
   // Update the formatted display value
   formattedRef.value = formatAsCurrency(rawValue);
 };
@@ -208,14 +217,14 @@ const getEmoji = (index) => {
             <v-form @submit.prevent="calculateStaffing">
               <v-text-field
                 v-model="formattedRevenue"
-                @input="(e) => updateFormattedValue(e, revenue, formattedRevenue)"
+                @input="updateRevenue"
                 label="Expected Yearly Revenue"
                 prefix="$"
                 type="text"
-                variant="outlined"
-                class="responsive-field input-large"
-                :rules="[v => !!v || 'Revenue is required']"
+                hint="Enter your projected revenue for the year"
+                clearable
                 required
+                class="responsive-field input-large"
               ></v-text-field>
 
               <div class="mt-4 mb-2">
@@ -227,36 +236,33 @@ const getEmoji = (index) => {
                     class="scroll-arrow left"
                     @click="scrollToggleLeft"
                     :disabled="!canScrollLeft"
-                    size="small"
                   >
                     <v-icon>mdi-chevron-left</v-icon>
                   </v-btn>
-                  <div class="toggle-wrapper" ref="toggleRef">
-                    <v-btn-toggle
-                      v-model="providerType"
-                      mandatory
-                      color="primary"
-                      divided
-                      class="provider-toggle"
-                    >
-                      <v-btn value="Cataract MD" class="provider-btn">
-                        Cataract Surgeon
-                      </v-btn>
-                      <v-btn value="Retina MD" class="provider-btn">
-                        Retina or Other MD
-                      </v-btn>
-                      <v-btn value="OD" class="provider-btn">
-                        Optometrist
-                      </v-btn>
-                    </v-btn-toggle>
-                  </div>
+                  <v-btn-toggle
+                    v-model="providerType"
+                    mandatory
+                    color="primary"
+                    divided
+                    class="w-100 responsive-toggle"
+                    ref="toggleRef"
+                  >
+                    <v-btn value="Cataract MD" class="flex-grow-1">
+                      Cataract Surgeon
+                    </v-btn>
+                    <v-btn value="Retina MD" class="flex-grow-1">
+                      Retina or Other MD
+                    </v-btn>
+                    <v-btn value="OD" class="flex-grow-1">
+                      Optometrist
+                    </v-btn>
+                  </v-btn-toggle>
                   <v-btn
                     icon
                     variant="text"
                     class="scroll-arrow right"
                     @click="scrollToggleRight"
                     :disabled="!canScrollRight"
-                    size="small"
                   >
                     <v-icon>mdi-chevron-right</v-icon>
                   </v-btn>
@@ -297,7 +303,7 @@ const getEmoji = (index) => {
                         <td>
                           <v-text-field
                             v-model="formattedMdRevenuePerFTE"
-                            @input="(e) => updateFormattedValue(e, mdRevenuePerFTE, formattedMdRevenuePerFTE)"
+                            @input="(e) => updateRevenuePerFTE(e, mdRevenuePerFTE, formattedMdRevenuePerFTE)"
                             density="compact"
                             hide-details
                             prefix="$"
@@ -312,7 +318,7 @@ const getEmoji = (index) => {
                         <td>
                           <v-text-field
                             v-model="formattedRetinaMdRevenuePerFTE"
-                            @input="(e) => updateFormattedValue(e, retinaMdRevenuePerFTE, formattedRetinaMdRevenuePerFTE)"
+                            @input="(e) => updateRevenuePerFTE(e, retinaMdRevenuePerFTE, formattedRetinaMdRevenuePerFTE)"
                             density="compact"
                             hide-details
                             prefix="$"
@@ -327,7 +333,7 @@ const getEmoji = (index) => {
                         <td>
                           <v-text-field
                             v-model="formattedOdRevenuePerFTE"
-                            @input="(e) => updateFormattedValue(e, odRevenuePerFTE, formattedOdRevenuePerFTE)"
+                            @input="(e) => updateRevenuePerFTE(e, odRevenuePerFTE, formattedOdRevenuePerFTE)"
                             density="compact"
                             hide-details
                             prefix="$"
@@ -495,11 +501,13 @@ const getEmoji = (index) => {
 .responsive-toggle {
   max-width: 100%;
   overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  padding: 0 32px; /* Add padding to make room for arrows */
 }
 
-.responsive-table-container {
-  width: 100%;
-  overflow-x: auto;
+.responsive-toggle::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 .provider-toggle-container {
@@ -507,55 +515,25 @@ const getEmoji = (index) => {
   display: flex;
   align-items: center;
   width: 100%;
-  margin: 0 auto;
-  max-width: 600px;
-}
-
-.toggle-wrapper {
-  flex: 1;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.toggle-wrapper::-webkit-scrollbar {
-  display: none;
-}
-
-.provider-toggle {
-  display: flex;
-  width: 100%;
-  min-width: min-content;
-}
-
-.provider-btn {
-  flex: 1;
-  min-width: 160px;
-  white-space: nowrap;
-  text-align: center;
+  margin: 0 -8px; /* Add negative margin to allow arrows to extend outside */
 }
 
 .scroll-arrow {
   position: absolute;
-  z-index: 2;
-  background-color: rgba(255, 255, 255, 0.95) !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  z-index: 2; /* Increase z-index to ensure visibility */
+  background-color: white !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-width: 32px !important;
+  height: 32px !important;
+  padding: 0 !important;
 }
 
 .scroll-arrow.left {
-  left: -16px;
+  left: 0;
 }
 
 .scroll-arrow.right {
-  right: -16px;
+  right: 0;
 }
 
 @media (max-width: 600px) {
@@ -581,24 +559,11 @@ const getEmoji = (index) => {
   .scroll-arrow {
     display: flex !important;
   }
-  
-  .provider-toggle-container {
-    padding: 0 16px;
-  }
-  
-  .provider-btn {
-    min-width: 140px;
-    font-size: 0.9rem;
-  }
 }
 
 @media (min-width: 601px) {
   .scroll-arrow {
     display: none !important;
-  }
-  
-  .provider-toggle-container {
-    padding: 0;
   }
 }
 </style>
