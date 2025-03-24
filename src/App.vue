@@ -9,9 +9,9 @@ const showResults = ref(false);
 const showAssumptions = ref(false);
 
 // Revenue per FTE values (preset but editable)
-const mdRevenuePerFTE = ref(550000); // Updated to $550,000 per FTE for MD
-const odRevenuePerFTE = ref(275000); // Updated to $275,000 per FTE for OD
-const retinaMdRevenuePerFTE = ref(325000); // $325,000 per FTE for Retina MD
+const mdRevenuePerFTE = ref('550000'); // Updated to $550,000 per FTE for MD
+const odRevenuePerFTE = ref('275000'); // Updated to $275,000 per FTE for OD
+const retinaMdRevenuePerFTE = ref('325000'); // $325,000 per FTE for Retina MD
 
 // Format a number as currency
 const formatAsCurrency = (value) => {
@@ -43,6 +43,15 @@ const updateRevenue = (event) => {
   revenue.value = rawValue.replace(/[^\d.]/g, '');
   // Update the formatted display value
   formattedRevenue.value = formatAsCurrency(rawValue);
+};
+
+// Handle revenue per FTE input changes
+const updateRevenuePerFTE = (event, ref) => {
+  const rawValue = event.target.value;
+  // Store the raw value (for calculations)
+  ref.value = rawValue.replace(/[^\d.]/g, '');
+  // Update the formatted display value
+  event.target.value = formatAsCurrency(rawValue);
 };
 
 // Array of diverse person emojis - only regular faces with different genders and skin tones
@@ -82,11 +91,11 @@ const technicians = computed(() => {
   if (isNaN(revValue)) return 0;
   
   if (providerType.value === 'Cataract MD') {
-    return revValue / mdRevenuePerFTE.value;
+    return revValue / parseFloat(mdRevenuePerFTE.value);
   } else if (providerType.value === 'Retina MD') {
-    return revValue / retinaMdRevenuePerFTE.value;
+    return revValue / parseFloat(retinaMdRevenuePerFTE.value);
   } else {
-    return revValue / odRevenuePerFTE.value;
+    return revValue / parseFloat(odRevenuePerFTE.value);
   }
 });
 
@@ -155,8 +164,8 @@ const getEmoji = (index) => {
         <!-- Introduction Section -->
         <v-card class="mb-6" variant="outlined">
           <v-card-text class="py-4">
-            <p class="intro-text">Use this calculator to determine the recommended number of technicians based on your practice's yearly revenue projections.</p>
-            <p class="mt-2 disclaimer-text"><strong>Disclaimer:</strong> This calculator is intended for a full-time physician (defined as working 32 or more hours of direct patient care per week). Physicians with reduced clinical hours should be evaluated on a case-by-case basis.</p>
+            <p class="intro-text">Use this calculator to estimate number of technicians based on your practice's yearly revenue projections.</p>
+            <p class="mt-2 disclaimer-text"><strong>Disclaimer:</strong> This calculator is intended for a full-time physician defined as working 32 or more hours of direct patient care per week. Physicians with reduced clinical hours should be evaluated on a case-by-case basis.</p>
           </v-card-text>
         </v-card>
 
@@ -187,13 +196,13 @@ const getEmoji = (index) => {
                   class="w-100 responsive-toggle"
                 >
                   <v-btn value="Cataract MD" class="flex-grow-1">
-                    Cataract Medical Doctor (MD)
+                    Cataract Surgeon
                   </v-btn>
                   <v-btn value="Retina MD" class="flex-grow-1">
-                    Retina & Other Medical Doctors (MD)
+                    Retina or Other MD
                   </v-btn>
                   <v-btn value="OD" class="flex-grow-1">
-                    Optometrist (OD)
+                    Optometrist
                   </v-btn>
                 </v-btn-toggle>
               </div>
@@ -224,55 +233,55 @@ const getEmoji = (index) => {
                       <tr>
                         <th>Provider Type</th>
                         <th>Revenue per FTE</th>
-                        <th>Description</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
-                        <td>Medical Doctor (MD)</td>
+                        <td>Cataract surgeon (MD)</td>
                         <td>
                           <v-text-field
                             v-model="mdRevenuePerFTE"
+                            @input="(e) => updateRevenuePerFTE(e, mdRevenuePerFTE)"
                             density="compact"
                             hide-details
                             prefix="$"
-                            type="number"
+                            type="text"
                             variant="outlined"
                             class="responsive-field input-large assumption-input"
                           ></v-text-field>
                         </td>
-                        <td>Target revenue per technician for Ophthalmologists</td>
                       </tr>
                       <tr>
-                        <td>Optometric Doctor (OD)</td>
-                        <td>
-                          <v-text-field
-                            v-model="odRevenuePerFTE"
-                            density="compact"
-                            hide-details
-                            prefix="$"
-                            type="number"
-                            variant="outlined"
-                            class="responsive-field input-large assumption-input"
-                          ></v-text-field>
-                        </td>
-                        <td>Target revenue per technician for Optometrists</td>
-                      </tr>
-                      <tr>
-                        <td>Retina Medical Doctor (MD)</td>
+                        <td>Retina or other ophthalmologist (MD)</td>
                         <td>
                           <v-text-field
                             v-model="retinaMdRevenuePerFTE"
+                            @input="(e) => updateRevenuePerFTE(e, retinaMdRevenuePerFTE)"
                             density="compact"
                             hide-details
                             prefix="$"
-                            type="number"
+                            type="text"
                             variant="outlined"
                             class="responsive-field input-large assumption-input"
                           ></v-text-field>
                         </td>
-                        <td>Target revenue per technician for Retina Specialists</td>
                       </tr>
+                      <tr>
+                        <td>Doctor of optometry (OD)</td>
+                        <td>
+                          <v-text-field
+                            v-model="odRevenuePerFTE"
+                            @input="(e) => updateRevenuePerFTE(e, odRevenuePerFTE)"
+                            density="compact"
+                            hide-details
+                            prefix="$"
+                            type="text"
+                            variant="outlined"
+                            class="responsive-field input-large assumption-input"
+                          ></v-text-field>
+                        </td>
+                      </tr>
+                     
                     </tbody>
                   </v-table>
                 </div>
@@ -303,15 +312,15 @@ const getEmoji = (index) => {
                 <h3 class="text-h6">Calculated Technicians Needed</h3>
                 <div class="text-h3 mt-2">{{ displayTechnicians }}</div>
                 <div v-if="exceedsMaxTechnicians" class="text-red mt-2 font-weight-medium">
-                  Doctors are currently capped at 8 technicians maximum
+                  Physicians are currently capped at 8 technicians maximum
                 </div>
                 <div class="text-body-1 mt-2">
-                  Based on {{ formatCurrency(revenue) }} yearly revenue for 
+                  Based on {{ formatCurrency(revenue) }} expected yearly revenue for 
                   {{ providerType === 'Cataract MD' 
-                    ? 'a Medical' 
+                    ? 'a cataract MD' 
                     : providerType === 'Retina MD' 
-                      ? 'a Retina Medical' 
-                      : 'an Optometric' }} Doctor
+                      ? 'a retina specialist or other ophthalmologist' 
+                      : 'an optometric doctor' }} 
                 </div>
                 <div class="text-body-2 mt-1">
                   Using {{ formatCurrency(
