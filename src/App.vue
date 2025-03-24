@@ -569,20 +569,28 @@ const getEmoji = (index) => {
     font-size: 1rem !important;
   }
   
-  /* Always show scroll arrows on mobile without requiring hover */
+  /* Hide navigation arrows on mobile - rely on native scrolling */
   .scroll-arrow {
-    opacity: 0.8;
+    display: none !important;
   }
   
-  /* Ensure arrows are displayed */
-  .scroll-arrow.left, .scroll-arrow.right {
-    display: flex !important;
+  /* Ensure the toggle is scrollable on mobile */
+  .responsive-toggle {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
   }
 }
 
 @media (min-width: 601px) {
+  /* Only show arrows on hover for desktop */
   .scroll-arrow {
-    display: none !important;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    display: flex !important;
+  }
+  
+  .provider-toggle-container:hover .scroll-arrow {
+    opacity: 1;
   }
 }
 
