@@ -551,6 +551,7 @@ const getEmoji = (index) => {
   display: flex;
   align-items: center;
   width: 100%;
+  margin: 0 0 10px 0;
 }
 
 .scroll-arrow {
@@ -630,25 +631,28 @@ const getEmoji = (index) => {
     font-size: 1rem !important;
   }
   
-  /* Hide navigation arrows on mobile - rely on native scrolling */
+  /* Show both arrows and dots on narrow screens */
   .scroll-arrow {
-    display: none !important;
+    display: flex !important;
+    opacity: 0.8; /* Always visible */
+    z-index: 2; /* Ensure they appear above content */
   }
   
-  /* Ensure the toggle is scrollable on mobile */
+  /* Ensure the toggle is scrollable */
   .responsive-toggle {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    padding: 0 30px; /* Add padding for the arrows */
   }
   
-  /* Show scroll indicator on mobile */
+  /* Show scroll indicator */
   .mobile-scroll-indicator {
     display: flex;
   }
 }
 
 @media (min-width: 601px) {
-  /* Only show arrows on hover for desktop */
+  /* Only show arrows on hover for wider screens */
   .scroll-arrow {
     opacity: 0;
     transition: opacity 0.3s ease;
