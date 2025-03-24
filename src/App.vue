@@ -123,30 +123,27 @@ const checkScroll = () => {
   canScrollLeft.value = container.scrollLeft > 0;
   canScrollRight.value = container.scrollLeft < (container.scrollWidth - container.clientWidth);
   
-  // Update active dot based on scroll position
-  updateActiveDot(container);
+  // Update scroll indicator position
+  updateScrollIndicator(container);
 };
 
-// Update active dot based on scroll position
-const updateActiveDot = (container) => {
+// Track scroll position variables
+const scrollThumbWidth = ref(33); // Default width as percentage
+const scrollThumbPosition = ref(0); // Position as percentage
+
+// Update scroll indicator position
+const updateScrollIndicator = (container) => {
   if (!container) return;
   
-  const totalWidth = container.scrollWidth - container.clientWidth;
-  const scrollPosition = container.scrollLeft;
+  const scrollableWidth = container.scrollWidth - container.clientWidth;
+  const scrollRatio = container.scrollLeft / scrollableWidth;
   
-  // Calculate which third of the scroll area we're in
-  const scrollRatio = scrollPosition / totalWidth;
+  // Adjust the scroll thumb position
+  scrollThumbPosition.value = scrollRatio * (100 - scrollThumbWidth.value);
   
-  if (scrollRatio < 0.33) {
-    activeDotIndex.value = 0;
-  } else if (scrollRatio < 0.66) {
-    activeDotIndex.value = 1;
-  } else {
-    activeDotIndex.value = 2;
-  }
+  // Update scroll thumb width based on visible portion
+  scrollThumbWidth.value = (container.clientWidth / container.scrollWidth) * 100;
 };
-
-const activeDotIndex = ref(0);
 
 // Computed properties
 const technicians = computed(() => {
@@ -296,12 +293,13 @@ const getEmoji = (index) => {
                 
                 <!-- Mobile scroll indicator -->
                 <div class="mobile-scroll-indicator">
-                  <div class="scroll-dots">
+                  <div class="scroll-track">
                     <div 
-                      v-for="i in 3" 
-                      :key="i-1" 
-                      class="scroll-dot"
-                      :class="{'active': activeDotIndex === i-1}"
+                      class="scroll-thumb"
+                      :style="{ 
+                        width: scrollThumbWidth + '%', 
+                        left: scrollThumbPosition + '%' 
+                      }"
                     ></div>
                   </div>
                 </div>
@@ -591,24 +589,33 @@ const getEmoji = (index) => {
   display: none;
   justify-content: center;
   margin-top: 8px;
+  width: 100%;
+  padding: 0 30px; /* Match toggle padding */
 }
 
+.scroll-track {
+  width: 100%;
+  height: 4px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+  position: relative;
+}
+
+.scroll-thumb {
+  position: absolute;
+  height: 100%;
+  background-color: rgb(25, 118, 210);
+  border-radius: 2px;
+  transition: left 0.1s ease;
+}
+
+/* Remove the old dots styling */
 .scroll-dots {
-  display: flex;
-  gap: 8px;
+  display: none;
 }
 
 .scroll-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
-}
-
-.scroll-dot.active {
-  background-color: rgb(25, 118, 210);
-  transform: scale(1.2);
+  display: none;
 }
 
 @media (max-width: 600px) {
