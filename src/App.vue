@@ -604,7 +604,7 @@ const getEmoji = (index) => {
 .scroll-thumb {
   position: absolute;
   height: 100%;
-  background-color: rgb(25, 118, 210);
+  background-color: rgba(0, 0, 0, 0.5);
   border-radius: 2px;
   transition: left 0.1s ease;
 }
