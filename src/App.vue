@@ -9,9 +9,12 @@ const showResults = ref(false);
 const showAssumptions = ref(false);
 
 // Revenue per FTE values (preset but editable)
-const mdRevenuePerFTE = ref('550000'); // Updated to $550,000 per FTE for MD
+const mdRevenuePerFTE = ref('550000'); // Updated to $550,000 per FTE for cataract MD
+const formattedMdRevenuePerFTE = ref('550,000');
 const odRevenuePerFTE = ref('275000'); // Updated to $275,000 per FTE for OD
-const retinaMdRevenuePerFTE = ref('325000'); // $325,000 per FTE for Retina MD
+const formattedOdRevenuePerFTE = ref('275,000');
+const retinaMdRevenuePerFTE = ref('325000'); // $325,000 per FTE for Retina or other MD
+const formattedRetinaMdRevenuePerFTE = ref('325,000');
 
 // Format a number as currency
 const formatAsCurrency = (value) => {
@@ -46,12 +49,12 @@ const updateRevenue = (event) => {
 };
 
 // Handle revenue per FTE input changes
-const updateRevenuePerFTE = (event, ref) => {
+const updateRevenuePerFTE = (event, ref, formattedRef) => {
   const rawValue = event.target.value;
   // Store the raw value (for calculations)
   ref.value = rawValue.replace(/[^\d.]/g, '');
   // Update the formatted display value
-  event.target.value = formatAsCurrency(rawValue);
+  formattedRef.value = formatAsCurrency(rawValue);
 };
 
 // Array of diverse person emojis - only regular faces with different genders and skin tones
@@ -240,8 +243,8 @@ const getEmoji = (index) => {
                         <td>Cataract surgeon (MD)</td>
                         <td>
                           <v-text-field
-                            v-model="mdRevenuePerFTE"
-                            @input="(e) => updateRevenuePerFTE(e, mdRevenuePerFTE)"
+                            v-model="formattedMdRevenuePerFTE"
+                            @input="(e) => updateRevenuePerFTE(e, mdRevenuePerFTE, formattedMdRevenuePerFTE)"
                             density="compact"
                             hide-details
                             prefix="$"
@@ -255,8 +258,8 @@ const getEmoji = (index) => {
                         <td>Retina or other ophthalmologist (MD)</td>
                         <td>
                           <v-text-field
-                            v-model="retinaMdRevenuePerFTE"
-                            @input="(e) => updateRevenuePerFTE(e, retinaMdRevenuePerFTE)"
+                            v-model="formattedRetinaMdRevenuePerFTE"
+                            @input="(e) => updateRevenuePerFTE(e, retinaMdRevenuePerFTE, formattedRetinaMdRevenuePerFTE)"
                             density="compact"
                             hide-details
                             prefix="$"
@@ -270,8 +273,8 @@ const getEmoji = (index) => {
                         <td>Doctor of optometry (OD)</td>
                         <td>
                           <v-text-field
-                            v-model="odRevenuePerFTE"
-                            @input="(e) => updateRevenuePerFTE(e, odRevenuePerFTE)"
+                            v-model="formattedOdRevenuePerFTE"
+                            @input="(e) => updateRevenuePerFTE(e, odRevenuePerFTE, formattedOdRevenuePerFTE)"
                             density="compact"
                             hide-details
                             prefix="$"
