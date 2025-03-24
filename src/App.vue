@@ -568,6 +568,16 @@ const getEmoji = (index) => {
   .input-large input {
     font-size: 1rem !important;
   }
+  
+  /* Always show scroll arrows on mobile without requiring hover */
+  .scroll-arrow {
+    opacity: 0.8;
+  }
+  
+  /* Ensure arrows are displayed */
+  .scroll-arrow.left, .scroll-arrow.right {
+    display: flex !important;
+  }
 }
 
 @media (min-width: 601px) {
