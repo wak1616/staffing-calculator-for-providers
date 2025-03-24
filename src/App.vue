@@ -513,22 +513,13 @@ const getEmoji = (index) => {
   display: flex;
   align-items: center;
   width: 100%;
-  margin: 0 40px; /* Add margin to make room for arrows */
 }
 
 .scroll-arrow {
   position: absolute;
-  z-index: 10; /* Increase z-index */
-  background-color: white !important; /* Solid white background */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  width: 32px !important; /* Explicit width */
-  height: 32px !important; /* Explicit height */
-  min-width: 32px !important; /* Ensure minimum width */
-  min-height: 32px !important; /* Ensure minimum height */
-  border-radius: 50% !important; /* Make buttons circular */
-  display: flex !important; /* Force display */
-  align-items: center !important;
-  justify-content: center !important;
+  z-index: 1;
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .scroll-arrow.left {
@@ -544,7 +535,6 @@ const getEmoji = (index) => {
   overflow-x: auto;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
-  padding: 0 4px; /* Add some padding */
 }
 
 .responsive-toggle::-webkit-scrollbar {
@@ -573,8 +563,6 @@ const getEmoji = (index) => {
   
   .scroll-arrow {
     display: flex !important;
-    opacity: 1 !important; /* Ensure visibility */
-    pointer-events: auto !important; /* Ensure clickability */
   }
 }
 
