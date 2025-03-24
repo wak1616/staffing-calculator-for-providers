@@ -236,8 +236,9 @@ const getEmoji = (index) => {
                     @click="scrollToggleLeft"
                     :disabled="!canScrollLeft"
                     size="small"
+                    icon
                   >
-                    <v-icon>mdi-chevron-left</v-icon>
+                    <v-icon size="24">mdi-chevron-left</v-icon>
                   </v-btn>
                   <v-btn-toggle
                     v-model="providerType"
@@ -263,8 +264,9 @@ const getEmoji = (index) => {
                     @click="scrollToggleRight"
                     :disabled="!canScrollRight"
                     size="small"
+                    icon
                   >
-                    <v-icon>mdi-chevron-right</v-icon>
+                    <v-icon size="24">mdi-chevron-right</v-icon>
                   </v-btn>
                 </div>
               </div>
@@ -525,14 +527,15 @@ const getEmoji = (index) => {
   min-width: 36px !important;
   height: 36px !important;
   padding: 0 !important;
+  border-radius: 50% !important;
 }
 
-.scroll-arrow.left {
-  left: 0;
+.scroll-arrow .v-icon {
+  color: rgba(0, 0, 0, 0.87) !important;
 }
 
-.scroll-arrow.right {
-  right: 0;
+.scroll-arrow:disabled {
+  opacity: 0.5;
 }
 
 @media (max-width: 600px) {
