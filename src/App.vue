@@ -501,13 +501,11 @@ const getEmoji = (index) => {
 .responsive-toggle {
   max-width: 100%;
   overflow-x: auto;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
-  padding: 0 32px; /* Add padding to make room for arrows */
 }
 
-.responsive-toggle::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+.responsive-table-container {
+  width: 100%;
+  overflow-x: auto;
 }
 
 .provider-toggle-container {
@@ -515,17 +513,22 @@ const getEmoji = (index) => {
   display: flex;
   align-items: center;
   width: 100%;
-  margin: 0 -8px; /* Add negative margin to allow arrows to extend outside */
+  margin: 0 40px; /* Add margin to make room for arrows */
 }
 
 .scroll-arrow {
   position: absolute;
-  z-index: 2; /* Increase z-index to ensure visibility */
-  background-color: white !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  min-width: 32px !important;
-  height: 32px !important;
-  padding: 0 !important;
+  z-index: 10; /* Increase z-index */
+  background-color: white !important; /* Solid white background */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  width: 32px !important; /* Explicit width */
+  height: 32px !important; /* Explicit height */
+  min-width: 32px !important; /* Ensure minimum width */
+  min-height: 32px !important; /* Ensure minimum height */
+  border-radius: 50% !important; /* Make buttons circular */
+  display: flex !important; /* Force display */
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 .scroll-arrow.left {
@@ -534,6 +537,18 @@ const getEmoji = (index) => {
 
 .scroll-arrow.right {
   right: 0;
+}
+
+.responsive-toggle {
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  padding: 0 4px; /* Add some padding */
+}
+
+.responsive-toggle::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 @media (max-width: 600px) {
@@ -558,6 +573,8 @@ const getEmoji = (index) => {
   
   .scroll-arrow {
     display: flex !important;
+    opacity: 1 !important; /* Ensure visibility */
+    pointer-events: auto !important; /* Ensure clickability */
   }
 }
 
