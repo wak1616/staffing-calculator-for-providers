@@ -100,8 +100,7 @@ const shuffleEmojis = () => {
 
 // Add scroll functions
 const scrollToggleLeft = () => {
-  const container = toggleRef.value?.$el;
-  if (!container) return;
+  const container = toggleRef.value.$el;
   container.scrollBy({
     left: -200,
     behavior: 'smooth'
@@ -109,8 +108,7 @@ const scrollToggleLeft = () => {
 };
 
 const scrollToggleRight = () => {
-  const container = toggleRef.value?.$el;
-  if (!container) return;
+  const container = toggleRef.value.$el;
   container.scrollBy({
     left: 200,
     behavior: 'smooth'
@@ -231,13 +229,22 @@ const getEmoji = (index) => {
 
               <div class="mt-4 mb-2">
                 <div class="text-subtitle-1 mb-2">Provider Type</div>
-                <div class="provider-scroll-container">
+                <div class="provider-toggle-container">
+                  <v-btn
+                    icon
+                    variant="text"
+                    class="scroll-arrow left"
+                    @click="scrollToggleLeft"
+                    :disabled="!canScrollLeft"
+                  >
+                    <v-icon size="24" color="primary">mdi-arrow-left</v-icon>
+                  </v-btn>
                   <v-btn-toggle
                     v-model="providerType"
                     mandatory
                     color="primary"
                     divided
-                    class="provider-toggle"
+                    class="w-100 responsive-toggle"
                     ref="toggleRef"
                   >
                     <v-btn value="Cataract MD" class="flex-grow-1">
@@ -250,20 +257,15 @@ const getEmoji = (index) => {
                       Optometrist
                     </v-btn>
                   </v-btn-toggle>
-                  <div class="scroll-indicators">
-                    <v-icon
-                      :icon="canScrollLeft ? 'mdi-chevron-left' : 'mdi-circle-small'"
-                      :color="canScrollLeft ? 'primary' : 'grey-lighten-2'"
-                      size="24"
-                      class="scroll-indicator"
-                    ></v-icon>
-                    <v-icon
-                      :icon="canScrollRight ? 'mdi-chevron-right' : 'mdi-circle-small'"
-                      :color="canScrollRight ? 'primary' : 'grey-lighten-2'"
-                      size="24"
-                      class="scroll-indicator"
-                    ></v-icon>
-                  </div>
+                  <v-btn
+                    icon
+                    variant="text"
+                    class="scroll-arrow right"
+                    @click="scrollToggleRight"
+                    :disabled="!canScrollRight"
+                  >
+                    <v-icon size="24" color="primary">mdi-arrow-right</v-icon>
+                  </v-btn>
                 </div>
               </div>
 
@@ -506,47 +508,49 @@ const getEmoji = (index) => {
   overflow-x: auto;
 }
 
-.provider-scroll-container {
+.provider-toggle-container {
   position: relative;
-  width: 100%;
-  overflow: hidden;
-}
-
-.provider-toggle {
-  width: 100%;
-  overflow-x: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  scroll-behavior: smooth;
-  padding: 4px 0;
-}
-
-.provider-toggle::-webkit-scrollbar {
-  display: none;
-}
-
-.scroll-indicators {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  transform: translateY(-50%);
   display: flex;
-  justify-content: space-between;
-  pointer-events: none;
-  padding: 0 8px;
+  align-items: center;
+  width: 100%;
 }
 
-.scroll-indicator {
-  background-color: rgba(255, 255, 255, 0.9);
-  border-radius: 50%;
-  pointer-events: auto;
-  cursor: pointer;
-  transition: all 0.2s ease;
+.scroll-arrow {
+  position: absolute;
+  z-index: 1;
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
 }
 
-.scroll-indicator:hover {
-  background-color: rgba(255, 255, 255, 1);
+.scroll-arrow.left {
+  left: 0;
+}
+
+.scroll-arrow.right {
+  right: 0;
+}
+
+.scroll-arrow:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.responsive-toggle {
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.responsive-toggle::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 @media (max-width: 600px) {
@@ -569,14 +573,14 @@ const getEmoji = (index) => {
     font-size: 1rem !important;
   }
   
-  .scroll-indicators {
-    padding: 0 4px;
+  .scroll-arrow {
+    display: flex !important;
   }
 }
 
 @media (min-width: 601px) {
-  .scroll-indicators {
-    display: none;
+  .scroll-arrow {
+    display: none !important;
   }
 }
 </style>
