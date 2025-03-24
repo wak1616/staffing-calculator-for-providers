@@ -231,13 +231,14 @@ const getEmoji = (index) => {
                 <div class="text-subtitle-1 mb-2">Provider Type</div>
                 <div class="provider-toggle-container">
                   <v-btn
-                    icon="mdi-chevron-left"
                     variant="text"
                     class="scroll-arrow left"
                     @click="scrollToggleLeft"
                     :disabled="!canScrollLeft"
                     size="small"
-                  ></v-btn>
+                  >
+                    <v-icon>mdi-chevron-left</v-icon>
+                  </v-btn>
                   <v-btn-toggle
                     v-model="providerType"
                     mandatory
@@ -257,13 +258,14 @@ const getEmoji = (index) => {
                     </v-btn>
                   </v-btn-toggle>
                   <v-btn
-                    icon="mdi-chevron-right"
                     variant="text"
                     class="scroll-arrow right"
                     @click="scrollToggleRight"
                     :disabled="!canScrollRight"
                     size="small"
-                  ></v-btn>
+                  >
+                    <v-icon>mdi-chevron-right</v-icon>
+                  </v-btn>
                 </div>
               </div>
 
