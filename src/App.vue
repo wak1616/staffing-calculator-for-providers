@@ -4,7 +4,7 @@ import { ref, computed, onMounted } from 'vue';
 // Form data
 const revenue = ref('');
 const formattedRevenue = ref('');
-const providerType = ref('MD');
+const providerType = ref('Cataract MD');
 const showResults = ref(false);
 const showAssumptions = ref(false);
 
@@ -81,12 +81,12 @@ const technicians = computed(() => {
   const revValue = parseFloat(revenue.value);
   if (isNaN(revValue)) return 0;
   
-  if (providerType.value === 'MD') {
+  if (providerType.value === 'Cataract MD') {
     return revValue / mdRevenuePerFTE.value;
-  } else if (providerType.value === 'OD') {
-    return revValue / odRevenuePerFTE.value;
-  } else {
+  } else if (providerType.value === 'Retina MD') {
     return revValue / retinaMdRevenuePerFTE.value;
+  } else {
+    return revValue / odRevenuePerFTE.value;
   }
 });
 
@@ -156,7 +156,7 @@ const getEmoji = (index) => {
         <v-card class="mb-6" variant="outlined">
           <v-card-text class="py-4">
             <p class="intro-text">Use this calculator to determine the recommended number of technicians based on your practice's yearly revenue projections.</p>
-            <p class="mt-2 disclaimer-text"><strong>Disclaimer:</strong> This calculator is intended for full-time employees (defined as working 32 or more hours of direct patient care per week). Employees with reduced clinical hours should be evaluated on a case-by-case basis.</p>
+            <p class="mt-2 disclaimer-text"><strong>Disclaimer:</strong> This calculator is intended for a full-time physician (defined as working 32 or more hours of direct patient care per week). Physicians with reduced clinical hours should be evaluated on a case-by-case basis.</p>
           </v-card-text>
         </v-card>
 
@@ -186,14 +186,14 @@ const getEmoji = (index) => {
                   divided
                   class="w-100 responsive-toggle"
                 >
-                  <v-btn value="MD" class="flex-grow-1">
-                    Medical Doctor (MD)
+                  <v-btn value="Cataract MD" class="flex-grow-1">
+                    Cataract Medical Doctor (MD)
+                  </v-btn>
+                  <v-btn value="Retina MD" class="flex-grow-1">
+                    Retina & Other Medical Doctors (MD)
                   </v-btn>
                   <v-btn value="OD" class="flex-grow-1">
-                    Optometric Doctor (OD)
-                  </v-btn>
-                  <v-btn value="RETINA_MD" class="flex-grow-1">
-                    Retina Medical Doctor (MD)
+                    Optometrist (OD)
                   </v-btn>
                 </v-btn-toggle>
               </div>
@@ -307,19 +307,19 @@ const getEmoji = (index) => {
                 </div>
                 <div class="text-body-1 mt-2">
                   Based on {{ formatCurrency(revenue) }} yearly revenue for 
-                  {{ providerType === 'MD' 
+                  {{ providerType === 'Cataract MD' 
                     ? 'a Medical' 
-                    : providerType === 'OD' 
-                      ? 'an Optometric' 
-                      : 'a Retina Medical' }} Doctor
+                    : providerType === 'Retina MD' 
+                      ? 'a Retina Medical' 
+                      : 'an Optometric' }} Doctor
                 </div>
                 <div class="text-body-2 mt-1">
                   Using {{ formatCurrency(
-                    providerType === 'MD' 
+                    providerType === 'Cataract MD' 
                       ? mdRevenuePerFTE 
-                      : providerType === 'OD' 
-                        ? odRevenuePerFTE 
-                        : retinaMdRevenuePerFTE) }} revenue per FTE
+                      : providerType === 'Retina MD' 
+                        ? retinaMdRevenuePerFTE 
+                        : odRevenuePerFTE) }} revenue per FTE
                 </div>
               </div>
               
