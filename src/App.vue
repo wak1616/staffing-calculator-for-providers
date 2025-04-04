@@ -13,8 +13,8 @@ const mdRevenuePerFTE = ref('550000'); // Updated to $550,000 per FTE for catara
 const formattedMdRevenuePerFTE = ref('550,000');
 const odRevenuePerFTE = ref('275000'); // Updated to $275,000 per FTE for OD
 const formattedOdRevenuePerFTE = ref('275,000');
-const retinaMdRevenuePerFTE = ref('325000'); // $325,000 per FTE for Retina or other MD
-const formattedRetinaMdRevenuePerFTE = ref('325,000');
+const retinaMdRevenuePerFTE = ref('350000'); // $350,000 per FTE for Retina MD
+const formattedRetinaMdRevenuePerFTE = ref('350,000');
 
 // Format a number as currency
 const formatAsCurrency = (value) => {
@@ -163,12 +163,12 @@ const technicians = computed(() => {
 
 // Check if technicians exceed the maximum cap
 const exceedsMaxTechnicians = computed(() => {
-  return technicians.value > 8;
+  return technicians.value > 9;
 });
 
 // Get display value for technicians (capped at 8+)
 const displayTechnicians = computed(() => {
-  return exceedsMaxTechnicians.value ? '8+' : technicians.value.toFixed(1);
+  return exceedsMaxTechnicians.value ? '9+' : technicians.value.toFixed(1);
 });
 
 // Get the number of whole technicians to display (maximum 8)
@@ -273,7 +273,7 @@ const getEmoji = (index) => {
                       Cataract Surgeon
                     </v-btn>
                     <v-btn value="Retina MD" class="flex-grow-1">
-                      Retina or Other MD
+                      Retina MD
                     </v-btn>
                     <v-btn value="OD" class="flex-grow-1">
                       Optometrist
@@ -350,7 +350,7 @@ const getEmoji = (index) => {
                         </td>
                       </tr>
                       <tr>
-                        <td>Retina or other ophthalmologist (MD)</td>
+                        <td>Retina Specialist (MD)</td>
                         <td>
                           <v-text-field
                             v-model="formattedRetinaMdRevenuePerFTE"
@@ -410,14 +410,14 @@ const getEmoji = (index) => {
                 <h3 class="text-h6">Calculated Technicians Needed</h3>
                 <div class="text-h3 mt-2">{{ displayTechnicians }}</div>
                 <div v-if="exceedsMaxTechnicians" class="text-red mt-2 font-weight-medium">
-                  Physicians are currently capped at 8 technicians maximum
+                  Physicians are currently capped at 9 technicians maximum
                 </div>
                 <div class="text-body-1 mt-2">
                   Based on {{ formatCurrency(revenue) }} expected yearly revenue for 
                   {{ providerType === 'Cataract MD' 
                     ? 'a cataract MD' 
                     : providerType === 'Retina MD' 
-                      ? 'a retina specialist or other ophthalmologist' 
+                      ? 'a retina MD' 
                       : 'an optometric doctor' }} 
                 </div>
                 <div class="text-body-2 mt-1">
