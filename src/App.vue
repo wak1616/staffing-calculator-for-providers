@@ -13,8 +13,8 @@ const mdRevenuePerFTE = ref('550000'); // Updated to $550,000 per FTE for catara
 const formattedMdRevenuePerFTE = ref('550,000');
 const odRevenuePerFTE = ref('275000'); // Updated to $275,000 per FTE for OD
 const formattedOdRevenuePerFTE = ref('275,000');
-const retinaMdRevenuePerFTE = ref('350000'); // $350,000 per FTE for Retina MD
-const formattedRetinaMdRevenuePerFTE = ref('350,000');
+const retinaMdRevenuePerFTE = ref('325000'); // $325,000 per FTE for Retina MD
+const formattedRetinaMdRevenuePerFTE = ref('325,000');
 
 // Format a number as currency
 const formatAsCurrency = (value) => {
