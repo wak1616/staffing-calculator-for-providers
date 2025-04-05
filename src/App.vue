@@ -270,10 +270,10 @@ const getEmoji = (index) => {
                     ref="toggleRef"
                   >
                     <v-btn value="Cataract MD" class="flex-grow-1">
-                      Cataract Surgeon
+                      Cataract M.D.
                     </v-btn>
                     <v-btn value="Retina MD" class="flex-grow-1">
-                      Retina MD
+                      Retina M.D.
                     </v-btn>
                     <v-btn value="OD" class="flex-grow-1">
                       Optometrist
@@ -335,7 +335,7 @@ const getEmoji = (index) => {
                     </thead>
                     <tbody>
                       <tr>
-                        <td>Cataract surgeon (MD)</td>
+                        <td>Cataract surgeon (M.D.)</td>
                         <td>
                           <v-text-field
                             v-model="formattedMdRevenuePerFTE"
@@ -350,7 +350,7 @@ const getEmoji = (index) => {
                         </td>
                       </tr>
                       <tr>
-                        <td>Retina Specialist (MD)</td>
+                        <td>Retina specialist (M.D.)</td>
                         <td>
                           <v-text-field
                             v-model="formattedRetinaMdRevenuePerFTE"
@@ -365,7 +365,7 @@ const getEmoji = (index) => {
                         </td>
                       </tr>
                       <tr>
-                        <td>Doctor of optometry (OD)</td>
+                        <td>Doctor of optometry (O.D.)</td>
                         <td>
                           <v-text-field
                             v-model="formattedOdRevenuePerFTE"
@@ -448,7 +448,13 @@ const getEmoji = (index) => {
       </v-container>
     </v-main>
 
-    <v-footer app></v-footer>
+    <v-footer app :color="'primary'" class="footer-content py-3" height="auto">
+      <v-container class="text-center">
+        <img src="/useye-logo-bottom.png" alt="US Eye Logo" class="footer-logo mb-2">
+        <p class="copyright-text"> &copy; 2025. All rights reserved.</p>
+      </v-container>
+    </v-footer>
+
   </v-app>
 </template>
 
@@ -674,5 +680,21 @@ const getEmoji = (index) => {
 .invisible {
   opacity: 0 !important;
   pointer-events: none;
+}
+
+.footer-content {
+  /* Removed background-color and border-top as color prop handles it */
+}
+
+.footer-logo {
+  max-height: 40px; /* Adjust height as needed */
+  width: auto;
+  filter: brightness(0) invert(1); /* Invert colors to make logo white if it's dark */
+}
+
+.copyright-text {
+  font-size: 0.5rem;
+  color: white; /* Change text color to white for better contrast */
+  margin: 0;
 }
 </style>
