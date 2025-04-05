@@ -161,30 +161,6 @@ const technicians = computed(() => {
   }
 });
 
-// Check if technicians exceed the maximum cap
-const exceedsMaxTechnicians = computed(() => {
-  return technicians.value > 9;
-});
-
-// Get display value for technicians (capped at 8+)
-const displayTechnicians = computed(() => {
-  return exceedsMaxTechnicians.value ? '9+' : technicians.value.toFixed(1);
-});
-
-// Get the number of whole technicians to display (maximum 8)
-const wholeNumber = computed(() => {
-  const value = Math.floor(technicians.value);
-  return Math.min(value, 8);
-});
-
-// Get the fraction for the partial technician (only if total is <= 8)
-const fraction = computed(() => {
-  if (exceedsMaxTechnicians.value) {
-    return 0; // No partial technician shown when exceeding max
-  }
-  return technicians.value - Math.floor(technicians.value);
-});
-
 // Calculate the staffing
 const calculateStaffing = () => {
   console.log('Calculating staffing...');
@@ -211,6 +187,23 @@ const formatCurrency = (value) => {
 const getEmoji = (index) => {
   return shuffledEmojis.value[index % shuffledEmojis.value.length];
 };
+
+// Get display value for technicians (no longer capped)
+const displayTechnicians = computed(() => {
+  // Always show the calculated value rounded to one decimal place
+  return technicians.value.toFixed(1);
+});
+
+// Get the number of whole technicians to display (no longer capped)
+const wholeNumber = computed(() => {
+  return Math.floor(technicians.value);
+});
+
+// Get the fraction for the partial technician (no longer capped)
+const fraction = computed(() => {
+  // Always calculate the fraction
+  return technicians.value - Math.floor(technicians.value);
+});
 </script>
 
 <template>
@@ -409,16 +402,9 @@ const getEmoji = (index) => {
               <div class="text-center mb-4">
                 <h3 class="text-h6">Calculated Technicians Needed</h3>
                 <div class="text-h3 mt-2">{{ displayTechnicians }}</div>
-                <div v-if="exceedsMaxTechnicians" class="text-red mt-2 font-weight-medium">
-                  Physicians are currently capped at 9 technicians maximum
-                </div>
                 <div class="text-body-1 mt-2">
                   Based on {{ formatCurrency(revenue) }} expected yearly revenue for 
-                  {{ providerType === 'Cataract MD' 
-                    ? 'a cataract MD' 
-                    : providerType === 'Retina MD' 
-                      ? 'a retina MD' 
-                      : 'an optometric doctor' }} 
+                  <strong>{{ providerType }}</strong>
                 </div>
                 <div class="text-body-2 mt-1">
                   Using {{ formatCurrency(
